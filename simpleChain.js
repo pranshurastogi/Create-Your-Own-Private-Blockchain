@@ -70,32 +70,37 @@ class Blockchain {
   }
 
   // Validate blockchain
-  async validateChain () {
-    let errorLog = []
-    let blockChainHeight = await this.getBlockHeight()
+  async validateChain() {   
+    await this._checkInit();
 
-    for (let i = 0; i <=blockChainHeight; i++) {
 
-      // validate a single block
-      if (!this.validateBlock(i)) errorLog.push(i)
+    let errorLog = [];
 
+    for (let i=0; i<=this.height; i++) {
+      let block = await this.getBlock(i);
+
+      // validate block
+      if (!(await this.validateBlock(block))) errorLog.push(i);
       // compare blocks hash link
-      let blockHash = this.getBlock(i).hash
-      let previousHash = this.getBlock(i + 1).previousBlockHash
-      if (blockHash !== previousHash) {
-        errorLog.push(i)
+      if (i<this.height) {
+        let blockHash = block.hash;
+        let nextBlock = await this.getBlock(i+1);
+        let previousHash = nextBlock.previousBlockHash;
+        if (blockHash !== previousHash) {
+          console.log("block " + i + " hash: " + block.hash + " does not match next previous hash of " + nextBlock.previousBlockHash);
+          errorLog.push(i);
+        }
       }
-
     }
-
-    if (errorLog.length > 0) {
-      console.log('Block errors = ' + errorLog.length)
-      console.log('Blocks: ' + errorLog)
+    if (errorLog.length>0) {
+      console.log('Block errors = ' + errorLog.length);
+      console.log('Blocks: '+errorLog);
     } else {
-      console.log('No errors detected')
+      console.log('No errors detected');
     }
-
-  }
+    return errorLog;
+}
+}
 
   
 
