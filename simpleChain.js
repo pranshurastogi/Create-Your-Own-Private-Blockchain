@@ -71,7 +71,6 @@ class Blockchain {
 
   // Validate blockchain
   async validateChain() {   
-    await this._checkInit();
 
 
     let errorLog = [];
