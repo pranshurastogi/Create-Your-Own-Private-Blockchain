@@ -100,7 +100,7 @@ class Blockchain {
     }
     return errorLog;
 }
-}
+
 
   
 
