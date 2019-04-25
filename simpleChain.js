@@ -74,7 +74,7 @@ class Blockchain {
     let errorLog = []
     let blockChainHeight = await this.getBlockHeight()
 
-    for (let i = 0; i < blockChainHeight; i++) {
+    for (let i = 0; i <=blockChainHeight; i++) {
 
       // validate a single block
       if (!this.validateBlock(i)) errorLog.push(i)
